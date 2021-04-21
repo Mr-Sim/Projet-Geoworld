@@ -171,4 +171,18 @@ function updateUser($params)
     catch ( Exeption $e ) {
         die ("erreur dans la requête ".$e->getMessage());
     }
-}
+}function getAuthentification($login,$pwd){
+    global $pdo;
+    $query = "SELECT * FROM utilisateur where login=:login and pwd=:pwd";
+    $prep = $pdo->prepare($query);
+    $prep->bindValue(':login', $login);
+    $prep->bindValue(':pwd', $pwd);
+    $prep->execute();
+    // on vérifie que la requête ne retourne qu'une seule ligne
+    if($prep->rowCount() == 1){
+    $result = $prep->fetch();
+    return $result;
+    }
+    else
+    return false;
+   }

@@ -11,7 +11,8 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link      https://github.com/sio-melun/geoworld
  */
-require_once("inc/manager-db.php");
+require_once "inc/manager-db.php";
+session_start();
 ?>
 
 <!doctype html>
@@ -57,9 +58,6 @@ require_once("inc/manager-db.php");
         <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
              aria-expanded="false">Continents</a>
@@ -73,14 +71,17 @@ require_once("inc/manager-db.php");
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-          <a class="nav-link" href="users.php">Géger utilisateurs</a>
+        <li class="nav-item">
+          <?php if (isset($_SESSION['nom'])):?>
+          <a class="nav-link" href="logout.php">Logout</a>
+          <?php else: ?>
+          <a class="nav-link" href="authentification.php">Login</a>
+          <?php endif; ?>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="login">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="register">Register</a>
+          <?php if (isset($_SESSION['role']) && $_SESSION['role']=="admin"): ?>
+          <a class="nav-link" href="users.php">Espace admin</a>
+          <?php endif; ?>
         </li>
         <li class="nav-item">
           <a class="nav-link " href="todo-projet.php">
@@ -88,10 +89,6 @@ require_once("inc/manager-db.php");
           </a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-      </form>
     </div>
   </nav>
 </header>
