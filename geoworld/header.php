@@ -11,7 +11,7 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link      https://github.com/sio-melun/geoworld
  */
-require_once "inc/manager-db.php";
+require_once("inc/manager-db.php");
 ?>
 
 <!doctype html>
@@ -73,6 +73,9 @@ require_once "inc/manager-db.php";
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+          <a class="nav-link" href="users.php">Géger utilisateurs</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="login">Login</a>
         </li>

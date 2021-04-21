@@ -21,7 +21,7 @@
  *  Les fonctions dépendent d'une connection à la base de données,
  *  cette fonction est déportée dans un autre script.
  */
-require_once 'connect-db.php';
+ 
 
 /**
  * Obtenir la liste de tous les pays référencés d'un continent donné
@@ -30,6 +30,9 @@ require_once 'connect-db.php';
  * 
  * @return array tableau d'objets (des pays)
  */
+
+require_once('connect-db.php');
+
 function getCountriesByContinent($continent)
 {
     // pour utiliser la variable globale dans la fonction
@@ -68,15 +71,104 @@ function getAllCountries()
 function getContinents()
 {
     global $pdo;
-    $querry='SELECT DISTINCT Continent FROM country';
+    $query='SELECT DISTINCT Continent FROM country';
     try {       
-        $result = $pdo->query($querry)->fetchAll();
+        $result = $pdo->query($query)->fetchAll();
         return $result; 
     }    
     catch ( Exception $e ) {
         die("erreur dans la requete ".$e->getMessage());
     }
-    $prep = $pdo->prepare($querry);
+    $prep = $pdo->prepare($query);
     $prep->execute();
     return $prep->fetchAll();
+}
+
+/**
+ * Obtenir la liste de tous les utilisateurs
+ * 
+ * @return liste d'objets
+ */
+function getAllUsers()
+{
+    global $pdo;
+    $query='SELECT * FROM utilisateur';
+    try {
+        $result = $pdo->query($query)->fetchAll();
+        return $result;
+    }
+    catch (Exeption $e) {
+        die("erreur dans la requete ".$e->getMessage());
+    }
+    $prep = $pdo->prepare($query);
+    $prep->execute();
+    return $prep->fetchAll();
+}
+
+/**
+ * Obtenir les paramètres d'un utilisateur précis
+ * 
+ * @return liste de paramètres d'un objet .
+ */
+function getUser($idUser)
+{
+    global $pdo;
+    $query='SELECT * FROM utilisateur WHERE iduser = :id ;';
+    try{
+        $prep = $pdo->prepare($query);
+        $prep->bindValue(':id', $idUser);
+    }
+    catch ( Exception $e ) {
+        die ("erreur dans la requête ".$e->getMessage());
+    }
+    $prep = $pdo->prepare($query);
+    $prep->bindValue(':id', $idUser);
+    $prep->execute();
+    return $prep->fetchAll();
+}
+
+
+/**
+ * Supprimer un utilisateur
+ * 
+ * Envoie une requête SQL à la base de donnée pour supprimer l'utilisateur dont l'id correspond à celui entré en paramètre
+ */
+function deleteUser($idUser)
+{
+    global $pdo;
+    $query='DELETE FROM utilisateur WHERE iduser = :id;';
+    try {
+        $prep = $pdo->prepare($query);
+        $prep->bindValue(':id', $idUser);
+        $prep->execute();
+    }
+    catch ( Exception $e ) {
+        die ("erreur dans la requete ".$e->getMessage());
+    }    
+}
+
+
+/**
+ * Modifier un utilisateur
+ * 
+ * Récupère les paramètres entrées dans le formulaire de 'user-edit.php'
+ * pour générer puis exécuter une requête de modification.
+ */
+function updateUser($params)
+{
+    global $pdo;
+    $nom = $params['nom'];
+    $prenom = $params['prenom'];
+    $login = $params['login'];
+    $pwd = $params['pwd'];
+    $role = $params['role'];
+    $idUser = $params['iduser'];
+    $query = "UPDATE utilisateur SET Nom='$nom', Prenom='$prenom', Login='$login', Pwd='$pwd', Role='$role' WHERE iduser=$idUser;";
+    try{
+        $prep = $pdo->prepare($query);
+        $prep->execute();
+    }
+    catch ( Exeption $e ) {
+        die ("erreur dans la requête ".$e->getMessage());
+    }
 }

@@ -13,19 +13,16 @@
  */
 
 ?>
-<?php  require_once 'header.php'; ?>
+<?php  require_once('header.php'); ?>
+
 <?php
-require_once 'inc/manager-db.php';
-
-
+require_once('inc/manager-db.php');
 if(isset($_GET['continent'])){
   $continent = $_GET['continent'];
 }
 else{
   $continent='Asia';
 }
-
-
 $desPays = getCountriesByContinent($continent);
 ?>
 
