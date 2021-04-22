@@ -171,7 +171,8 @@ function updateUser($params)
     catch ( Exeption $e ) {
         die ("erreur dans la requête ".$e->getMessage());
     }
-}function getAuthentification($login,$pwd){
+}
+function getAuthentification($login,$pwd){
     global $pdo;
     $query = "SELECT * FROM utilisateur where login=:login and pwd=:pwd";
     $prep = $pdo->prepare($query);
@@ -185,4 +186,23 @@ function updateUser($params)
     }
     else
     return false;
-   }
+}
+
+function addUser($user)
+{
+    global $pdo;
+    print_r($user);
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $login = $_POST['login'];
+    $pwd = $_POST['pwd'];
+    $role = $_POST['role'];
+    $query = "INSERT INTO utilisateur VALUES(NULL, '$nom', '$prenom', '$login', '$pwd', '$role')";
+    try{
+        $prep = $pdo->prepare($query);
+        $prep->execute();
+    }
+    catch ( Exeption $e ) {
+        die ("erreur dans la requête ".$e->getMessage());
+    }
+}
