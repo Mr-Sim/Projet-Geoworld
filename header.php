@@ -83,11 +83,6 @@ session_start();
           <a class="nav-link" href="users.php">Espace admin</a>
           <?php endif; ?>
         </li>
-        <li class="nav-item">
-          <a class="nav-link " href="todo-projet.php">
-            Présentation-Atelier-de-Prof-SLAM
-          </a>
-        </li>
       </ul>
     </div>
   </nav>
