@@ -53,7 +53,3 @@ endforeach;
 
 		        <input type="submit" name="update" value="update">
 	</form>
-
-
-
-
