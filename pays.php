@@ -85,33 +85,25 @@ $pays=$_GET['pays'];?>
             <td> <?php echo $infos->GovernmentForm ?></td>
         </tr>
         <tr>
-            <?php if ($infos->HeadOfState!=""):?>
             <th>Chef d'Etat</th>
             <td> <?php echo $infos->HeadOfState ?></td>
-            <?php endif;?>
         </tr>
         <tr>
-            <?php if ($infos->Capital!=""):?>
             <th>Capitale</th>
             <?php $capital=$infos->Capital;
             $cap=getCapital($capital);
             foreach($cap as $ncap):?>
                 <td> <?php echo $ncap->Name;?></td>
             <?php endforeach;?>
-            <?php endif;?>
         </tr>
         <?php endforeach;?>
     </table>
 </div>
 <?php foreach($infoPays as $infos){
     $idCountry=$infos->id;
-    $continent=$infos->Continent;
     $infoCity=getCity($idCountry);
     $infoLanguage=getLanguage($idCountry);
-    $continent=$infos->Continent;
 }?>
-
-<?php if ($continent!="Antarctica"):?>
 <center>
     <h2> <?php echo "Langues de $pays";?> </h2></br>
 </center>
@@ -158,11 +150,7 @@ $pays=$_GET['pays'];?>
         <?php foreach($infoCity as $city):?>
         <tr>
           <td> <?php echo $city->Name; ?></td>
-          <?php if ($city->District!="–"):?>
           <td> <?php echo $city->District; ?></td>
-          <?php else:?>
-          <td> <?php echo "Aucune région"; ?></td>
-          <?php endif;?>
           <td> <?php echo $city->Population; ?></td>
           <?php if (isset($_SESSION['role']) && $_SESSION['role']=="professeur"):?>
           <td><a href="city-edit.php?edit=<?php echo $city->id ?> ">MODIFIER</a></td>
@@ -171,7 +159,6 @@ $pays=$_GET['pays'];?>
         <?php endforeach;?>
     </table>
 </div>
-<?php endif;?>
 <?php
 require_once 'javascripts.php';
 require_once 'footer.php';

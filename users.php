@@ -1,6 +1,6 @@
 <?php
 /**
- * Users pageS
+ * Users pages
  *
  * PHP version 7
  *
@@ -23,16 +23,17 @@ if(isset($_GET['delete'])){
     deleteUser($idUser);
 }
 
-#  if (isset($_POST['edit'])){
-#   //print_r($_POST);
-#    updateSalarie($_POST);
-#}
-
 if (isset($_POST['update'])){
     $params = $_POST;
     unset($params['update']);
     updateUser($params);
    
+}
+
+if (isset($_POST['addUser'])){
+    $user = $_POST;
+    addUser($user);
+
 }
  $usersList = getAllUsers($pdo);
 ?>
@@ -43,7 +44,12 @@ if (isset($_POST['update'])){
   <link rel="stylesheet" href="style.css" />
 </head>
 
+
+
 <center>
+<form method="post" action="register.php">
+	<input type="submit" name="register" value="Ajouter un Utilisateur">
+</form>
 <p>MODIFIER OU SUPPRIMER DES UTILISATEURS</p>
 <table border="2">
     <th>ID</th>
