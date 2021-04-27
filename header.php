@@ -55,6 +55,9 @@ session_start();
         <li class="nav-item active">
           <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
              aria-expanded="false">Continents</a>
@@ -70,9 +73,9 @@ session_start();
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <?php if (isset($_SESSION['nom'])):?>
-          <a class="nav-link" href="logout.php">Déconnexion</a>
+          <a class="nav-link" href="logout.php">Logout</a>
           <?php else: ?>
-          <a class="nav-link" href="authentification.php">Connexion</a>
+          <a class="nav-link" href="authentification.php">Login</a>
           <?php endif; ?>
         </li>
         <li class="nav-item">

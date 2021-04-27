@@ -21,7 +21,7 @@
  *  Les fonctions dépendent d'une connection à la base de données,
  *  cette fonction est déportée dans un autre script.
  */
-require_once 'connect-db.php';
+ 
 
 /**
  * Obtenir la liste de tous les pays référencés d'un continent donné
@@ -30,6 +30,9 @@ require_once 'connect-db.php';
  * 
  * @return array tableau d'objets (des pays)
  */
+
+require_once('connect-db.php');
+
 function getCountriesByContinent($continent)
 {
     // pour utiliser la variable globale dans la fonction
@@ -68,18 +71,19 @@ function getAllCountries()
 function getContinents()
 {
     global $pdo;
-    $querry='SELECT DISTINCT Continent FROM country';
+    $query='SELECT DISTINCT Continent FROM country';
     try {       
-        $result = $pdo->query($querry)->fetchAll();
+        $result = $pdo->query($query)->fetchAll();
         return $result; 
     }    
     catch ( Exception $e ) {
         die("erreur dans la requete ".$e->getMessage());
     }
-    $prep = $pdo->prepare($querry);
+    $prep = $pdo->prepare($query);
     $prep->execute();
     return $prep->fetchAll();
 }
+
 /**
  * Obtenir la liste de tous les utilisateurs
  * 
@@ -168,64 +172,37 @@ function updateUser($params)
         die ("erreur dans la requête ".$e->getMessage());
     }
 }
-
 function getAuthentification($login,$pwd){
- global $pdo;
- $query = "SELECT * FROM utilisateur where login=:login and pwd=:pwd";
- $prep = $pdo->prepare($query);
- $prep->bindValue(':login', $login);
- $prep->bindValue(':pwd', $pwd);
- $prep->execute();
- // on vérifie que la requête ne retourne qu'une seule ligne
- if($prep->rowCount() == 1){
- $result = $prep->fetch();
- return $result;
- }
- else
- return false;
+    global $pdo;
+    $query = "SELECT * FROM utilisateur where login=:login and pwd=:pwd";
+    $prep = $pdo->prepare($query);
+    $prep->bindValue(':login', $login);
+    $prep->bindValue(':pwd', $pwd);
+    $prep->execute();
+    // on vérifie que la requête ne retourne qu'une seule ligne
+    if($prep->rowCount() == 1){
+    $result = $prep->fetch();
+    return $result;
+    }
+    else
+    return false;
 }
 
-function getInfoCountries($pays)
+function addUser($user)
 {
     global $pdo;
-    $query = 'SELECT * FROM Country WHERE Name = :name;';
-    $prep = $pdo->prepare($query);
-    // on associe ici (bind) le paramètre (:name) de la req SQL,
-    // avec la valeur reçue en paramètre de la fonction ($pays)
-    // on prend soin de spécifier le type de la valeur (String) afin
-    // de se prémunir d'injections SQL (des filtres seront appliqués)
-    $prep->bindValue(':name', $pays, PDO::PARAM_STR);
-    $prep->execute();
-    // var_dump($prep);  pour du debug
-    // var_dump($pays);
-
-    // on retourne un tableau d'objets (car spécifié dans connect-db.php)
-    return $prep->fetchAll();
-}
-
-function getCapital($capital){
-    global $pdo;
-    $query = "SELECT Name FROM City WHERE id = '$capital';";
-    $prep = $pdo->prepare($query);
-    $prep->execute();
-    return $prep->fetchAll();
-    // return $pdo->query($query)->fetchAll();
-}
-
-function getCity($idCountry){
-    global $pdo;
-    $query = "SELECT * FROM City WHERE idCountry = '$idCountry';";
-    $prep = $pdo->prepare($query);
-    $prep->execute();
-    return $prep->fetchAll();
-    // return $pdo->query($query)->fetchAll();
-}
-
-function getLanguage($idCountry){
-    global $pdo;
-    $query = "SELECT * FROM countrylanguage, language WHERE countrylanguage.idLanguage=language.id AND idCountry='$idCountry';";
-    $prep = $pdo->prepare($query);
-    $prep->execute();
-    return $prep->fetchAll();
-    // return $pdo->query($query)->fetchAll();
+    print_r($user);
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $login = $_POST['login'];
+    $pwd = $_POST['pwd'];
+    $role = $_POST['role'];
+    $query = "INSERT INTO utilisateur VALUES(NULL, '$nom', '$prenom', '$login', '$pwd', '$role')";
+    try{
+        $prep = $pdo->prepare($query);
+        $prep->execute();
+    }
+    catch ( Exeption $e ) {
+        die ("erreur dans la requête ".$e->getMessage());
+    }
 }
