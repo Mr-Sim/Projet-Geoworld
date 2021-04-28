@@ -243,6 +243,11 @@ function getInfoCountries($pays)
     return $prep->fetchAll();
 }
 
+/**
+ * Obtenir le nom de la capitale d'un pays.
+ * Prends en paramètre l'id de la ville qu'est obtenue par getInfoCountries()
+ * Renvoie la capitale
+ */
 function getCapital($capital){
     global $pdo;
     $query = "SELECT Name FROM City WHERE id = '$capital';";
@@ -252,6 +257,11 @@ function getCapital($capital){
     // return $pdo->query($query)->fetchAll();
 }
 
+/**
+ * Obtenir les informations d'une ou plusieurs villes associée à un pays.
+ * Prends en paramètre l'id du pays qu'est obtenue par getInfoCountries().
+ * Retourne les informations de la/ des ville(s) dans un tableau.
+ */
 function getCity($idCountry){
     global $pdo;
     $query = "SELECT * FROM City WHERE idCountry = '$idCountry';";
@@ -260,7 +270,11 @@ function getCity($idCountry){
     return $prep->fetchAll();
     // return $pdo->query($query)->fetchAll();
 }
-
+/**
+ * Obtenir les informations d'un ou plusieurs langages parlés dans un pays.
+ * Prends en paramètre l'id du pays qu'est obtenue par getInfoCountries()
+ * Retourne les informations du ou des langages parlés dans un tableau.
+ */
 function getLanguage($idCountry){
     global $pdo;
     $query = "SELECT * FROM countrylanguage, language WHERE countrylanguage.idLanguage=language.id AND idCountry='$idCountry';";
