@@ -22,7 +22,7 @@
  *  cette fonction est déportée dans un autre script.
  */
  
-
+require_once('connect-db.php');
 /**
  * Obtenir la liste de tous les pays référencés d'un continent donné
  *
@@ -30,9 +30,6 @@
  * 
  * @return array tableau d'objets (des pays)
  */
-
-require_once('connect-db.php');
-
 function getCountriesByContinent($continent)
 {
     // pour utiliser la variable globale dans la fonction
@@ -172,6 +169,15 @@ function updateUser($params)
         die ("erreur dans la requête ".$e->getMessage());
     }
 }
+
+/**
+ * Authentifier un utilisateur.
+ * 
+ * Récupère en paramètre le login et le mot de passe d'un utilisateur 
+ * et cherche une ligne correspondante dans la base de données.
+ * Renvoie les informations de l'utilisateur si il est retrouvé.
+ * Renvoie false si aucun utilisateur correspondant aux paramètres n'a été trouvé.
+ */
 function getAuthentification($login,$pwd){
     global $pdo;
     $query = "SELECT * FROM utilisateur where login=:login and pwd=:pwd";
@@ -188,6 +194,12 @@ function getAuthentification($login,$pwd){
     return false;
 }
 
+/**
+ * Ajouter un Utilisateur.
+ * 
+ * Récupère en paramètre les informations du nouvel utilisateur.
+ * Génère et excute une requête pour ajouter un nouvel utilisateur.
+ */
 function addUser($user)
 {
     global $pdo;
@@ -205,4 +217,55 @@ function addUser($user)
     catch ( Exeption $e ) {
         die ("erreur dans la requête ".$e->getMessage());
     }
+}
+
+/**
+ * Obtenir les informations d'un pays. 
+ * Prends en paramètre le nom du pays.
+ * Génère et exécute une requête SQL cherchant les informations du pays choisis. 
+ * Renvoie les informations du pays sélectioné.
+ */
+function getInfoCountries($pays)
+{
+    global $pdo;
+    $query = 'SELECT * FROM Country WHERE Name = :name;';
+    $prep = $pdo->prepare($query);
+    // on associe ici (bind) le paramètre (:name) de la req SQL,
+    // avec la valeur reçue en paramètre de la fonction ($pays)
+    // on prend soin de spécifier le type de la valeur (String) afin
+    // de se prémunir d'injections SQL (des filtres seront appliqués)
+    $prep->bindValue(':name', $pays, PDO::PARAM_STR);
+    $prep->execute();
+    // var_dump($prep);  pour du debug
+    // var_dump($pays);
+
+    // on retourne un tableau d'objets (car spécifié dans connect-db.php)
+    return $prep->fetchAll();
+}
+
+function getCapital($capital){
+    global $pdo;
+    $query = "SELECT Name FROM City WHERE id = '$capital';";
+    $prep = $pdo->prepare($query);
+    $prep->execute();
+    return $prep->fetchAll();
+    // return $pdo->query($query)->fetchAll();
+}
+
+function getCity($idCountry){
+    global $pdo;
+    $query = "SELECT * FROM City WHERE idCountry = '$idCountry';";
+    $prep = $pdo->prepare($query);
+    $prep->execute();
+    return $prep->fetchAll();
+    // return $pdo->query($query)->fetchAll();
+}
+
+function getLanguage($idCountry){
+    global $pdo;
+    $query = "SELECT * FROM countrylanguage, language WHERE countrylanguage.idLanguage=language.id AND idCountry='$idCountry';";
+    $prep = $pdo->prepare($query);
+    $prep->execute();
+    return $prep->fetchAll();
+    // return $pdo->query($query)->fetchAll();
 }
